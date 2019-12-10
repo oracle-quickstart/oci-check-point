@@ -55,6 +55,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /home/runner/work/oci-check-point/oci-check-point/cloudguard-ngfw/simple-orm/export-dist/orm.zip
+          asset_path: ${{ github.workspace }}/cloudguard-ngfw/simple-orm/export-dist/orm.zip
           asset_name: cloudguard-ngfw-orm-stack.zip
           asset_content_type: application/zip
