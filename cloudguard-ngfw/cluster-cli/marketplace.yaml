@@ -36,7 +36,6 @@ variableGroups:
       - vm_compute_shape
       - availability_domain_name
       - ssh_public_key
-      - use_existing_ip
 
   - title: "Network Configuration"
     variables:
@@ -44,16 +43,16 @@ variableGroups:
       - vcn_id 
       - vcn_display_name 
       - vcn_cidr_block 
-      - vcn_dns_label            
-      - subnet_type 
+      - vcn_dns_label
       - subnet_span 
-      - subnet_id 
+      - public_subnet_id 
       - public_subnet_display_name       
       - public_subnet_cidr_block      
       - public_subnet_dns_label
       - private_subnet_id
       - private_subnet_display_name
       - private_subnet_cidr_block
+      - use_existing_ip
 
   - title: "Additional Configuration"
     variables:
@@ -117,12 +116,6 @@ variables:
     dependsOn:
       compartmentId: compartment_ocid
       imageId: mp_listing_resource_id
-  
-  use_existing_ip:
-    type: bool
-    title: Cluster Public IP
-    required: true
-    description: Create a permanent cluster IP or add one later
 
   mp_listing_id:
     type: string    
@@ -247,7 +240,7 @@ variables:
     title: Subnet CIDR
     description: The CIDR of the new Subnet. The new subnet's CIDR should not overlap with any other subnet CIDRs.    
 
-  subnet_id:
+  public_subnet_id:
     visible: #($network_strategy  == "Use Existing VCN and Subnet")
       eq:
         - network_strategy 
@@ -297,6 +290,16 @@ variables:
     title: Subnet DNS Label
     description: Subnet DNS Label. Only letters and numbers, starting with a letter. 15 characters max.    
 
+  use_existing_ip:
+    type: enum
+    title: Cluster Public IP
+    required: true
+    title: Network Strategy
+    enum:
+      - "Create new IP"
+      - "Add IP later"
+    description: Create a permanent cluster IP or add one later
+
   nsg_whitelist_ip:
     type: string
     required: true
@@ -322,39 +325,22 @@ variables:
 outputGroups:
   - title: "Output"
     outputs:
-      - ${instance_public_ip}
+      - ${instance_public_ips}
+      - ${instance_private_ips}
       - ${instance_id}
 
 outputs:
-  instance_https_url1:
+  instance_https_urls:
     type: link
     title: Go to Application VM URL
     visible: false
 
-  instance_public_ip1:
+  instance_public_ips:
     type: link
     title: Public IP
     visible: true
   
-  instance_private_ip1:
+  instance_private_ips:
     type: link
     title: Private IP
     visible: true
-
-  instance_https_url2:
-    type: link
-    title: Go to Application VM URL
-    visible: false
-
-  instance_public_ip2:
-    type: link
-    title: Public IP
-    visible: true
-  
-  instance_private_ip2:
-    type: link
-    title: Private IP
-    visible: true
-  
-primaryOutputButton: ${application_url}
-

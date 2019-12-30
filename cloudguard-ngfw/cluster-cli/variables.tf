@@ -83,11 +83,6 @@ variable "vcn_dns_label" {
   default     = "simple"
 }
 
-variable "subnet_type" {
-  description = "Choose between private and public subnets"
-  default     = "Use Public Subnet"
-}
-
 variable "subnet_span" {
   description = "Choose between regional and AD specific subnets"
   default     = "Regional Subnet"
@@ -151,5 +146,5 @@ variable "routetable_display_name" {
 
 variable "use_existing_ip" {
   description = "Use an existing permanent public ip"
-  default     = false
+  default     = "Create new IP"
 }

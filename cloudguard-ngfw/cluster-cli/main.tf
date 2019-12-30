@@ -77,26 +77,14 @@ resource "oci_core_vnic_attachment" "private_vnic_attachment" {
   ]
 }
 
-output "instance_public_ip1" {
-  value = oci_core_instance.cluster-vm.0.public_ip
+output "instance_public_ips" {
+  value = [oci_core_instance.cluster-vm.*.public_ip]
 }
 
-output "instance_private_ip1" {
-  value = oci_core_instance.cluster-vm.0.private_ip
+output "instance_private_ips" {
+  value = [oci_core_instance.cluster-vm.*.private_ip]
 }
 
-output "instance_https_url1" {
-  value = "https://${oci_core_instance.cluster-vm.0.public_ip}"
-}
-
-output "instance_public_ip2" {
-  value = oci_core_instance.cluster-vm.1.public_ip
-}
-
-output "instance_private_ip2" {
-  value = oci_core_instance.cluster-vm.1.private_ip
-}
-
-output "instance_https_url2" {
-  value = "https://${oci_core_instance.cluster-vm.1.public_ip}"
+output "instance_https_urls" {
+  value = formatlist("https://%s", oci_core_instance.cluster-vm.*.public_ip)
 }

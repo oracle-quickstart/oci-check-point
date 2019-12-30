@@ -3,9 +3,8 @@ resource "oci_core_private_ip" "cluster_frontend_ip" {
 }
 
 # frontend cluster ip 
-# NOTE: no option to use an existing public ip. Consider not making permanent ip part of template
 resource "oci_core_public_ip" "cluster_public_ip" {
-  count          = var.use_existing_ip ? 0 : 1
+  count          = (var.use_existing_ip != "Create new IP" ? 0 : 1)
   compartment_id = var.compartment_ocid
 
   lifetime      = "RESERVED"
