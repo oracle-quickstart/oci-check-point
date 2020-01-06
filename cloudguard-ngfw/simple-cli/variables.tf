@@ -14,17 +14,17 @@ variable "region" {
 ############################
 
 variable "mp_listing_id" {
-  default = "ocid1.appcataloglisting.oc1..aaaaaaaahcc2ffdraf4if3eat2j5doivedtv7wwzpoa4tvhvjfdcozshmgeq"
+  default     = "ocid1.appcataloglisting.oc1..aaaaaaaahcc2ffdraf4if3eat2j5doivedtv7wwzpoa4tvhvjfdcozshmgeq"
   description = "Marketplace Listing OCID"
 }
 
 variable "mp_listing_resource_id" {
-  default = "ocid1.image.oc1..aaaaaaaads23bte7abqb6cfrqmyq73zd7wpxchwwdteqk7mmqmbcv7pinv7a"
+  default     = "ocid1.image.oc1..aaaaaaaads23bte7abqb6cfrqmyq73zd7wpxchwwdteqk7mmqmbcv7pinv7a"
   description = "Marketplace Listing Image OCID"
 }
 
 variable "mp_listing_resource_version" {
-  default = "R80.30"
+  default     = "R80.30"
   description = "Marketplace Listing Package/Resource Version"
 }
 

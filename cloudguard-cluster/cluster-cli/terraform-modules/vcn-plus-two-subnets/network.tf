@@ -26,15 +26,22 @@ resource "oci_core_default_route_table" "default_route_table" {
   }
 }
 
-
 resource "oci_core_subnet" "public_subnet" {
   count                      = var.use_existing_network ? 0 : 1
   compartment_id             = var.compartment_ocid
   vcn_id                     = oci_core_vcn.vcn[count.index].id
-  cidr_block                 = var.subnet_cidr_block
-  display_name               = var.subnet_display_name
+  cidr_block                 = var.public_subnet_cidr_block
+  display_name               = var.public_subnet_display_name
   route_table_id             = oci_core_vcn.vcn[count.index].default_route_table_id
   dns_label                  = var.subnet_dns_label
   prohibit_public_ip_on_vnic = "false"
 }
 
+resource "oci_core_subnet" "private_subnet" {
+  count                      = var.use_existing_network ? 0 : 1
+  compartment_id             = var.compartment_ocid
+  vcn_id                     = oci_core_vcn.vcn[count.index].id
+  cidr_block                 = var.private_subnet_cidr_block
+  display_name               = var.private_subnet_display_name
+  prohibit_public_ip_on_vnic = "true"
+}

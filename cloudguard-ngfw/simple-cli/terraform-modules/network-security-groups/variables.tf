@@ -15,6 +15,6 @@ variable "nsg_whitelist_ip" {
 }
 
 variable "use_existing_network" {
-  type = bool
+  type    = bool
   default = false
 }

@@ -48,7 +48,7 @@ variableGroups:
       - public_subnet_id 
       - public_subnet_display_name       
       - public_subnet_cidr_block      
-      - public_subnet_dns_label
+      - subnet_dns_label
       - private_subnet_id
       - private_subnet_display_name
       - private_subnet_cidr_block
@@ -279,7 +279,7 @@ variables:
     title: VCN DNS Label
     description: VCN DNS Label. Only letters and numbers, starting with a letter. 15 characters max.    
 
-  public_subnet_dns_label:
+  subnet_dns_label:
     visible: #($network_strategy  == ""Create New VCN and Subnet"")
       eq:
         - network_strategy 
@@ -323,10 +323,11 @@ variables:
 
 
 outputGroups:
-  - title: "Output"
+  - title: "Instances info"
     outputs:
       - ${instance_public_ips}
       - ${instance_private_ips}
+      - ${instance_https_urls}
       - ${instance_id}
 
 outputs:
@@ -344,3 +345,5 @@ outputs:
     type: link
     title: Private IP
     visible: true
+
+primaryOutputButton: ${instance_https_urls}

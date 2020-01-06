@@ -69,9 +69,9 @@ resource "oci_core_vnic_attachment" "private_vnic_attachment" {
     subnet_id              = module.vcn_plus_two_subnet.private_subnet_id
     assign_public_ip       = "false"
     skip_source_dest_check = "true"
-    display_name = "Secondary"
+    display_name           = "Secondary"
   }
-  instance_id  = oci_core_instance.cluster-vm[count.index].id
+  instance_id = oci_core_instance.cluster-vm[count.index].id
   depends_on = [
     oci_core_instance.cluster-vm,
   ]
