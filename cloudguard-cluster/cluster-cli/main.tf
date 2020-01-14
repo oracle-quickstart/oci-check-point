@@ -34,11 +34,6 @@ module "default_network_sec_group" {
   vcn_cidr_block   = var.vcn_cidr_block
 }
 
-data "oci_identity_availability_domain" "ad" {
-  compartment_id = var.tenancy_ocid
-  ad_number      = var.availability_domain_number
-}
-
 resource "oci_core_instance" "cluster-vm" {
   depends_on = [module.marketplace_subscription]
   count      = 2
@@ -47,6 +42,7 @@ resource "oci_core_instance" "cluster-vm" {
   compartment_id      = var.compartment_ocid
   display_name        = "${var.vm_display_name}-${count.index + 1}"
   shape               = var.vm_compute_shape
+  fault_domain = data.oci_identity_fault_domains.fds.fault_domains[count.index].name
 
   create_vnic_details {
     subnet_id              = module.vcn_plus_two_subnet.public_subnet_id
@@ -87,4 +83,8 @@ output "instance_private_ips" {
 
 output "instance_https_urls" {
   value = formatlist("https://%s", oci_core_instance.cluster-vm.*.public_ip)
+}
+
+output "cluster_ip" {
+  value = (var.use_existing_ip != "Create new IP") ? "No public cluster IP created" : oci_core_public_ip.cluster_public_ip.0.ip_address
 }

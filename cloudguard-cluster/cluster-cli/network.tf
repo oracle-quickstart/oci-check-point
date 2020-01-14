@@ -4,7 +4,7 @@ resource "oci_core_private_ip" "cluster_frontend_ip" {
 
 # frontend cluster ip 
 resource "oci_core_public_ip" "cluster_public_ip" {
-  count          = (var.use_existing_ip != "Create new IP" ? 0 : 1)
+  count          = (var.use_existing_ip != "Create new IP") ? 0 : 1
   compartment_id = var.compartment_ocid
 
   lifetime      = "RESERVED"
@@ -35,7 +35,7 @@ resource "oci_core_route_table" "private_route_table" {
 }
 
 # add backend route table to backend subnet
-resource "oci_core_route_table_attachment" "test_route_table_attachment" {
+resource "oci_core_route_table_attachment" "private_route_table_attachment" {
   subnet_id      = module.vcn_plus_two_subnet.private_subnet_id
   route_table_id = oci_core_route_table.private_route_table.id
 }
