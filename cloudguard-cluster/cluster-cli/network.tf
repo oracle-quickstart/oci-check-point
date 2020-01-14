@@ -20,7 +20,7 @@ resource "oci_core_private_ip" "cluster_private_ip" {
 resource "oci_core_route_table" "private_route_table" {
   compartment_id = var.compartment_ocid
   vcn_id         = module.vcn_plus_two_subnet.vcn_id
-  display_name   = "backend_route_table"
+  display_name   = var.private_routetable_display_name 
 
   route_rules {
     network_entity_id = oci_core_private_ip.cluster_private_ip.id

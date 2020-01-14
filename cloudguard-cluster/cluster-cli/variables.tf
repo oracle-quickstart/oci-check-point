@@ -139,9 +139,14 @@ variable "nsg_display_name" {
   default     = "simple-security-group"
 }
 
-variable "routetable_display_name" {
-  description = "Route table Name"
-  default     = "simple-route-table"
+variable "public_routetable_display_name" {
+  description = "Public route table Name"
+  default     = "public-route-table"
+}
+
+variable "private_routetable_display_name" {
+  description = "Private route table Name"
+  default     = "private-route-table"
 }
 
 variable "use_existing_ip" {

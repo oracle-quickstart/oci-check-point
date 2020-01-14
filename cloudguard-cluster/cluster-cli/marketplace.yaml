@@ -59,7 +59,8 @@ variableGroups:
       - compartment_ocid
       - nsg_whitelist_ip 
       - nsg_display_name 
-      - routetable_display_name       
+      - public_routetable_display_name       
+      - private_routetable_display_name
 
 variables:
   # Hidden variables
@@ -202,7 +203,7 @@ variables:
     type: string
     default: public-subnet
     required: true
-    title: Subnet
+    title: Public Subnet
     description: The name of the new public Subnet
 
   public_subnet_cidr_block:
@@ -214,7 +215,7 @@ variables:
     default: 10.0.0.0/24
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
     required: true
-    title: Subnet CIDR
+    title: Public Subnet CIDR
     description: The CIDR of the new Subnet. The new subnet's CIDR should not overlap with any other subnet CIDRs.
 
   private_subnet_display_name:
@@ -225,7 +226,7 @@ variables:
     type: string
     default: private-subnet
     required: true
-    title: Subnet
+    title: Private Subnet
     description: The name of the new private Subnet
 
   private_subnet_cidr_block:
@@ -237,7 +238,7 @@ variables:
     default: 10.0.1.0/24
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
     required: true
-    title: Subnet CIDR
+    title: Public Subnet CIDR
     description: The CIDR of the new Subnet. The new subnet's CIDR should not overlap with any other subnet CIDRs.    
 
   public_subnet_id:
@@ -251,7 +252,7 @@ variables:
       compartmentId: compartment_ocid 
     default: ''
     required: true
-    title: Existing Subnet
+    title: Existing Public Subnet
     description: An existing public subnet to use for compute instances. This subnet must already be present in the chosen VCN.
 
   private_subnet_id:
@@ -294,7 +295,6 @@ variables:
     type: enum
     title: Cluster Public IP
     required: true
-    title: Network Strategy
     enum:
       - "Create new IP"
       - "Add IP later"
@@ -314,12 +314,20 @@ variables:
     title: Network Security Group
     description: The name of the Network Security Group
 
-  routetable_display_name:
+  public_routetable_display_name:
     type: string
     required: true
-    default: my-route-table
-    title: Route Table
-    description: The name of the Route Table
+    default: public-route-table
+    title: Public Route Table
+    description: The name of the Public Route Table
+
+  private_routetable_display_name:
+    type: string
+    required: true
+    default: private-route-table
+    title: Private Route Table
+    description: The name of the Private Route Table
+
 
 
 outputGroups:
@@ -345,5 +353,3 @@ outputs:
     type: link
     title: Private IP
     visible: true
-
-primaryOutputButton: ${instance_https_urls}
