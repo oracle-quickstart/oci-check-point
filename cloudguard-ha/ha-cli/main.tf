@@ -34,7 +34,7 @@ module "default_network_sec_group" {
   vcn_cidr_block   = var.vcn_cidr_block
 }
 
-resource "oci_core_instance" "cluster-vm" {
+resource "oci_core_instance" "ha-vms" {
   depends_on = [module.marketplace_subscription]
   count      = 2
 
@@ -57,6 +57,15 @@ resource "oci_core_instance" "cluster-vm" {
     source_id   = var.mp_listing_resource_id
   }
 
+  metadata = {
+    ssh_authorized_keys = var.ssh_public_key
+//    user_data = <<-EOF
+//      #!/bin/bash
+//      clish -c 'set user admin shell /bin/bash' -s
+//      
+//      /bin/blink_config -s 'gateway_cluster_member=true&download_info=true&upload_info=true&mgmt_admin_radio=gaia_admin&reboot_if_required=true'
+//      EOF
+  }
 }
 
 resource "oci_core_vnic_attachment" "private_vnic_attachment" {
@@ -67,22 +76,22 @@ resource "oci_core_vnic_attachment" "private_vnic_attachment" {
     skip_source_dest_check = "true"
     display_name           = "Secondary"
   }
-  instance_id = oci_core_instance.cluster-vm[count.index].id
+  instance_id = oci_core_instance.ha-vms[count.index].id
   depends_on = [
-    oci_core_instance.cluster-vm,
+    oci_core_instance.ha-vms,
   ]
 }
 
 output "instance_public_ips" {
-  value = [oci_core_instance.cluster-vm.*.public_ip]
+  value = [oci_core_instance.ha-vms.*.public_ip]
 }
 
 output "instance_private_ips" {
-  value = [oci_core_instance.cluster-vm.*.private_ip]
+  value = [oci_core_instance.ha-vms.*.private_ip]
 }
 
 output "instance_https_urls" {
-  value = formatlist("https://%s", oci_core_instance.cluster-vm.*.public_ip)
+  value = formatlist("https://%s", oci_core_instance.ha-vms.*.public_ip)
 }
 
 output "cluster_ip" {

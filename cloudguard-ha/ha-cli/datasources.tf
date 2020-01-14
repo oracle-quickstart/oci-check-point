@@ -14,7 +14,7 @@ data "oci_identity_fault_domains" "fds" {
 
 data "oci_core_vnic_attachments" "master_attachments" {
   compartment_id = var.compartment_ocid
-  instance_id    = oci_core_instance.cluster-vm.0.id
+  instance_id    = oci_core_instance.ha-vms.0.id
 
   filter {
     name   = "subnet_id"

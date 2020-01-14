@@ -19,7 +19,7 @@ variable "mp_listing_id" {
 }
 
 variable "mp_listing_resource_id" {
-  default     = "ocid1.image.oc1..aaaaaaaads23bte7abqb6cfrqmyq73zd7wpxchwwdteqk7mmqmbcv7pinv7a"
+  default     = "ocid1.image.oc1..aaaaaaaa6oxdrklc2cv4e6k2rmafoswaf3xz5xjy3q77fsupmw4a4wcwb7kq"
   description = "Marketplace Listing Image OCID"
 }
 
@@ -34,7 +34,7 @@ variable "mp_listing_resource_version" {
 
 variable "vm_display_name" {
   description = "Instance Name"
-  default     = "simple"
+  default     = "ha"
 }
 
 variable "vm_compute_shape" {
