@@ -61,6 +61,8 @@ variableGroups:
       - nsg_display_name 
       - public_routetable_display_name       
       - private_routetable_display_name
+      - enable_download_info
+      - enable_upload_info
 
 variables:
   # Hidden variables
@@ -328,7 +330,25 @@ variables:
     title: Private Route Table
     description: The name of the Private Route Table
 
+  enable_download_info:
+    type: enum
+    required: true
+    default: "true"
+    title: Enable Download Info
+    description: Automatically download Blade Contracts and other important data (recommended)         
+    enum:
+      - "true"
+      - "false"
 
+  enable_upload_info:
+    type: enum
+    required: true
+    default: "false"
+    title: Enable Upload Info
+    description: Improve product experience by sending data to Check Point        
+    enum:
+      - "true"
+      - "false"
 
 outputGroups:
   - title: "Instances info"

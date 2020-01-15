@@ -59,12 +59,12 @@ resource "oci_core_instance" "ha-vms" {
 
   metadata = {
     ssh_authorized_keys = var.ssh_public_key
-//    user_data = <<-EOF
-//      #!/bin/bash
-//      clish -c 'set user admin shell /bin/bash' -s
-//      
-//      /bin/blink_config -s 'gateway_cluster_member=true&download_info=true&upload_info=true&mgmt_admin_radio=gaia_admin&reboot_if_required=true'
-//      EOF
+    user_data = <<-EOF
+      #!/bin/bash
+      clish -c 'set user admin shell /bin/bash' -s
+      ftw_sic=$(curl_cli --silent http://169.254.169.254/opc/v1/instance/id)
+      /bin/blink_config -s "gateway_cluster_member=true&download_info=${var.enable_download_info}&upload_info=${var.enable_upload_info}&mgmt_admin_radio=gaia_admin&ftw_sic_key=$ftw_sic&reboot_if_required=true"
+      EOF
   }
 }
 

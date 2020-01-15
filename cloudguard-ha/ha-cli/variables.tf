@@ -153,3 +153,13 @@ variable "use_existing_ip" {
   description = "Use an existing permanent public ip"
   default     = "Create new IP"
 }
+
+variable "enable_download_info" {
+  description = "Automatically download Blade Contracts and other important data (recommended)"
+  default = "true"
+}
+
+variable "enable_upload_info" {
+  description = "Improve product experience by sending data to Check Point"
+  default = "false"
+}
