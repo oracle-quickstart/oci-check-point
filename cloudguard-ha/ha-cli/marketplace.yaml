@@ -48,7 +48,7 @@ variableGroups:
       - public_subnet_id 
       - public_subnet_display_name       
       - public_subnet_cidr_block      
-      - subnet_dns_label
+      - public_subnet_dns_label
       - private_subnet_id
       - private_subnet_display_name
       - private_subnet_cidr_block
@@ -63,6 +63,7 @@ variableGroups:
       - private_routetable_display_name
       - enable_download_info
       - enable_upload_info
+      - shell
 
 variables:
   # Hidden variables
@@ -168,7 +169,7 @@ variables:
         - network_strategy 
         - "Create New VCN and Subnet"
     type: string
-    default: my-vcn
+    default: ha-vcn
     required: true
     title: Virtual Cloud Network (VCN)
     description: The name of the new Virtual Cloud Network (VCN)
@@ -278,11 +279,11 @@ variables:
         - "Create New VCN and Subnet"
     type: string
     required: true
-    default: myvcn
+    default: ha
     title: VCN DNS Label
     description: VCN DNS Label. Only letters and numbers, starting with a letter. 15 characters max.    
 
-  subnet_dns_label:
+  public_subnet_dns_label:
     visible: #($network_strategy  == ""Create New VCN and Subnet"")
       eq:
         - network_strategy 
@@ -349,6 +350,18 @@ variables:
     enum:
       - "true"
       - "false"
+
+  shell:
+    type: enum
+    required: true
+    default: "/etc/cli.sh"
+    title: Shell
+    description: Change the admin shell to enable advanced command line configuration
+    enum:
+      - "/etc/cli.sh"
+      - "/bin/bash"
+      - "/bin/csh"
+      - "/bin/tcsh"
 
 outputGroups:
   - title: "Instances info"

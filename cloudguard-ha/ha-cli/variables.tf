@@ -70,7 +70,7 @@ variable "vcn_id" {
 
 variable "vcn_display_name" {
   description = "VCN Name"
-  default     = "simple-vcn"
+  default     = "ha-vcn"
 }
 
 variable "vcn_cidr_block" {
@@ -80,7 +80,7 @@ variable "vcn_cidr_block" {
 
 variable "vcn_dns_label" {
   description = "VCN DNS Label"
-  default     = "simple"
+  default     = "ha"
 }
 
 variable "subnet_span" {
@@ -102,7 +102,7 @@ variable "public_subnet_cidr_block" {
   default     = "10.0.0.0/24"
 }
 
-variable "subnet_dns_label" {
+variable "public_subnet_dns_label" {
   description = "Subnet DNS Label"
   default     = "management"
 }
@@ -136,7 +136,7 @@ variable "nsg_whitelist_ip" {
 
 variable "nsg_display_name" {
   description = "Network Security Groups - Name"
-  default     = "simple-security-group"
+  default     = "cluster-security-group"
 }
 
 variable "public_routetable_display_name" {
@@ -162,4 +162,9 @@ variable "enable_download_info" {
 variable "enable_upload_info" {
   description = "Improve product experience by sending data to Check Point"
   default = "false"
+}
+
+variable "shell" {
+  description = "Change the admin shell to enable advanced command line configuration"
+  default = "/etc/cli.sh"
 }

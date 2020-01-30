@@ -6,4 +6,21 @@ There are two options for deployment:
 - create a new network with a public and private subnet to launch the gateways into
 - launch the gateways into an existing network
 
-Once the deployment has finished, follow this [guide](https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk142872&partition=General&product=CloudGuard) to finish configuring the cluster.
+The gateways are configured with the following topology:
+
+![](./images/cp_cluster_topology.png)
+
+Each gateway is created with two VNICs, one on the public subnet and one on the private subnet. 
+
+Each subnet has a virtual secondary private IP created, both of which are assigned to the same gateway instance. The public virtual IP must be a permanent IP to be transfered between VNICs, the option to add an existing permanent IP later is provided. 
+
+If the option for a new network is selected, a public and private subnet are created. A routing table for the private subnet will be created with the backend cluster IP as the default route for all traffic. A routing table for the frontend will have the default route pointed to an internet gateway created.
+
+The First Time Wizard for both instances are handled by a cloud-init script. The following options are set by variables: 
+
+- Download info: Choose whether to download important data and Blade Contracts (highly recommended for smooth operation)
+- Upload info: Choose whether to send data to Check Point to improve product experience
+
+The password for the gateway must be set by SSHing to the instance, and password authentication over SSH is disabled by default. The SIC (Secure Internal Communication) key is set to the OCID of the instance on initialization.
+
+Once the deployment has finished, follow the part 6 of this [guide](https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk142872&partition=General&product=CloudGuard) to finish configuring the cluster with a Check Point security management server.
