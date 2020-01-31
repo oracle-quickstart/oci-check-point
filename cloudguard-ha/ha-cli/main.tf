@@ -19,7 +19,7 @@ module "vcn_plus_two_subnet" {
   vcn_dns_label               = var.vcn_dns_label
   public_subnet_display_name  = var.public_subnet_display_name
   public_subnet_cidr_block    = var.public_subnet_cidr_block
-  subnet_dns_label            = var.subnet_dns_label
+  subnet_dns_label            = var.public_subnet_dns_label
   private_subnet_display_name = var.private_subnet_display_name
   private_subnet_cidr_block   = var.private_subnet_cidr_block
 }
