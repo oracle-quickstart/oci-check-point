@@ -29,11 +29,11 @@ variable "subnet_dns_label" {
 }
 
 variable "use_existing_network" {
-  type = bool
+  type    = bool
   default = false
 }
 
-variable "vcn_id" {  
+variable "vcn_id" {
   default = ""
 }
 

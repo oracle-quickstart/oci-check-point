@@ -19,7 +19,7 @@ variable "mp_listing_id" {
 }
 
 variable "mp_listing_resource_id" {
-  default     = "ocid1.image.oc1..aaaaaaaads23bte7abqb6cfrqmyq73zd7wpxchwwdteqk7mmqmbcv7pinv7a"
+  default     = "ocid1.image.oc1..aaaaaaaa6oxdrklc2cv4e6k2rmafoswaf3xz5xjy3q77fsupmw4a4wcwb7kq"
   description = "Marketplace Listing Image OCID"
 }
 
@@ -34,7 +34,7 @@ variable "mp_listing_resource_version" {
 
 variable "vm_display_name" {
   description = "Instance Name"
-  default     = "simple"
+  default     = "ha"
 }
 
 variable "vm_compute_shape" {
@@ -70,7 +70,7 @@ variable "vcn_id" {
 
 variable "vcn_display_name" {
   description = "VCN Name"
-  default     = "simple-vcn"
+  default     = "ha-vcn"
 }
 
 variable "vcn_cidr_block" {
@@ -80,12 +80,7 @@ variable "vcn_cidr_block" {
 
 variable "vcn_dns_label" {
   description = "VCN DNS Label"
-  default     = "simple"
-}
-
-variable "subnet_type" {
-  description = "Choose between private and public subnets"
-  default     = "Use Public Subnet"
+  default     = "ha"
 }
 
 variable "subnet_span" {
@@ -93,23 +88,37 @@ variable "subnet_span" {
   default     = "Regional Subnet"
 }
 
-variable "subnet_id" {
+variable "public_subnet_id" {
   default = ""
 }
 
-variable "subnet_display_name" {
-  description = "Subnet Name"
-  default     = "simple-subnet"
+variable "public_subnet_display_name" {
+  description = "Public Subnet Name"
+  default     = "public-subnet"
 }
 
-variable "subnet_cidr_block" {
-  description = "Subnet CIDR"
+variable "public_subnet_cidr_block" {
+  description = "Public Subnet CIDR"
   default     = "10.0.0.0/24"
 }
 
-variable "subnet_dns_label" {
+variable "public_subnet_dns_label" {
   description = "Subnet DNS Label"
   default     = "management"
+}
+
+variable "private_subnet_id" {
+  default = ""
+}
+
+variable "private_subnet_display_name" {
+  description = "Private Subnet Name"
+  default     = "private-subnet"
+}
+
+variable "private_subnet_cidr_block" {
+  description = "Private Subnet CIDR"
+  default     = "10.0.1.0/24"
 }
 
 ############################
@@ -127,10 +136,35 @@ variable "nsg_whitelist_ip" {
 
 variable "nsg_display_name" {
   description = "Network Security Groups - Name"
-  default     = "simple-security-group"
+  default     = "cluster-security-group"
 }
 
-variable "routetable_display_name" {
-  description = "Route table Name"
-  default     = "simple-route-table"
+variable "public_routetable_display_name" {
+  description = "Public route table Name"
+  default     = "public-route-table"
+}
+
+variable "private_routetable_display_name" {
+  description = "Private route table Name"
+  default     = "private-route-table"
+}
+
+variable "use_existing_ip" {
+  description = "Use an existing permanent public ip"
+  default     = "Create new IP"
+}
+
+variable "enable_download_info" {
+  description = "Automatically download Blade Contracts and other important data (recommended)"
+  default = "true"
+}
+
+variable "enable_upload_info" {
+  description = "Improve product experience by sending data to Check Point"
+  default = "false"
+}
+
+variable "shell" {
+  description = "Change the admin shell to enable advanced command line configuration"
+  default = "/etc/cli.sh"
 }

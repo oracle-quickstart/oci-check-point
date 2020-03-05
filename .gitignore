@@ -6,3 +6,6 @@
 *.tfstate.*
 *.zip*
 *.tfvars
+
+# swap files
+*.swp
