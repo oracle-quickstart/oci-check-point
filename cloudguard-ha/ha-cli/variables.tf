@@ -19,7 +19,7 @@ variable "mp_listing_id" {
 }
 
 variable "mp_listing_resource_id" {
-  default     = "ocid1.image.oc1..aaaaaaaa6oxdrklc2cv4e6k2rmafoswaf3xz5xjy3q77fsupmw4a4wcwb7kq"
+  default     = "ocid1.image.oc1..aaaaaaaaqbpxbmhmhhramptimmrsyerpxraebnh223iqx4wnnuzbawt3773a"
   description = "Marketplace Listing Image OCID"
 }
 
