@@ -43,6 +43,7 @@ resource "oci_core_vnic_attachment" "private_vnic_attachment" {
     subnet_id              = local.use_existing_network ? var.private_subnet_id : oci_core_subnet.private_subnet[0].id
     assign_public_ip       = "false"
     skip_source_dest_check = "true"
+    nsg_ids                = [oci_core_network_security_group.nsg.id]
     display_name           = "Secondary"
   }
   instance_id = oci_core_instance.ha-vms[count.index].id
