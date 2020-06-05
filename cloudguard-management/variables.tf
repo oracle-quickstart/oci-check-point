@@ -16,7 +16,7 @@ variable "region" {
 variable "mp_subscription_enabled" {
   description = "Subscribe to Marketplace listing?"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "mp_listing_id" {
@@ -30,7 +30,7 @@ variable "mp_listing_resource_id" {
 }
 
 variable "mp_listing_resource_version" {
-  default     = "R80.40"
+  default     = "R80.40-041020202056"
   description = "Marketplace Listing Package/Resource Version"
 }
 
