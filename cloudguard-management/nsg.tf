@@ -30,6 +30,21 @@ resource "oci_core_network_security_group_security_rule" "rule_ingress_tcp443" {
   }
 }
 
+resource "oci_core_network_security_group_security_rule" "rule_ingress_tcp22" {
+  network_security_group_id = oci_core_network_security_group.nsg.id
+  protocol                  = "6"
+  direction                 = "INGRESS"
+  source                    = var.nsg_whitelist_ip != "" ? var.nsg_whitelist_ip : "0.0.0.0/0"
+  stateless                 = false
+
+  tcp_options {
+    destination_port_range {
+      min = 22
+      max = 22
+    }
+  }
+}
+
 //Allow inbound logging connections from managed gateways
 resource "oci_core_network_security_group_security_rule" "rule_ingress_tcp257" {
   network_security_group_id = oci_core_network_security_group.nsg.id

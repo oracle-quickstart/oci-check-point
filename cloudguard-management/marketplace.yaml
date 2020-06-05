@@ -77,12 +77,14 @@ variables:
     required: true
     title: Compartment
     description: The compartment in which to create all Compute resources
+    default: compartment_ocid
 
   network_compartment_ocid:
     type: oci:identity:compartment:id
     required: true
     title: Compartment
     description: The compartment in which to create all Network resources
+    default: compartment_ocid
 
   region:
     type: oci:identity:region:name
@@ -299,16 +301,18 @@ variables:
 
 
 outputGroups:
-  - title: "Output"
+  - title: "CloudGuard Connection"
     outputs:
-      - ${instance_public_ip}
-      - ${instance_id}
+      - instance_public_ip
+      - instance_private_ip
+      - instance_id
+
 
 outputs:
-  application_url:
+  instance_https_url:
     type: link
-    title: Go to Application VM URL
-    visible: false
+    title: Open Management Portal
+    visible: true
 
   instance_public_ip:
     type: link
@@ -319,6 +323,16 @@ outputs:
     type: link
     title: Private IP
     visible: true
-  
-primaryOutputButton: ${application_url}
 
+  initial_instruction:
+    type: string
+    title: Initial Instruction
+    visible: false
+
+  subscription:
+    type: string
+    title: Subscription
+    visible: false
+
+    
+primaryOutputButton: instance_https_url
