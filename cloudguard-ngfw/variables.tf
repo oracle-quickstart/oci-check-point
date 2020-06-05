@@ -16,7 +16,7 @@ variable "region" {
 variable "mp_subscription_enabled" {
   description = "Subscribe to Marketplace listing?"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "mp_listing_id" {
@@ -30,7 +30,7 @@ variable "mp_listing_resource_id" {
 }
 
 variable "mp_listing_resource_version" {
-  default     = "R80.40"
+  default     = "R80.40-041720200106"
   description = "Marketplace Listing Package/Resource Version"
 }
 
@@ -40,7 +40,7 @@ variable "mp_listing_resource_version" {
 
 variable "vm_display_name" {
   description = "Instance Name"
-  default     = "simple"
+  default     = "cloudguard-ngfw"
 }
 
 variable "vm_compute_shape" {
@@ -76,7 +76,7 @@ variable "vcn_id" {
 
 variable "vcn_display_name" {
   description = "VCN Name"
-  default     = "simple-vcn"
+  default     = "cloudguard-ngfw-vcn"
 }
 
 variable "vcn_cidr_block" {
