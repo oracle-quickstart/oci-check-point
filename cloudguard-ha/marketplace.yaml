@@ -83,12 +83,14 @@ variables:
     required: true
     title: Compartment
     description: The compartment in which to create all Compute resources
+    default: compartment_ocid
 
   network_compartment_ocid:
     type: oci:identity:compartment:id
     required: true
     title: Compartment
     description: The compartment in which to create all Network resources
+    default: compartment_ocid
 
   region:
     type: oci:identity:region:name
@@ -180,7 +182,7 @@ variables:
         - network_strategy 
         - "Create New VCN and Subnet"
     type: string
-    default: ha-vcn
+    default: cloudguard-ha-vcn
     required: true
     title: Virtual Cloud Network (VCN)
     description: The name of the new Virtual Cloud Network (VCN)
@@ -324,7 +326,7 @@ variables:
   nsg_display_name:
     type: string
     required: true
-    default: my-network-security-group
+    default: ha-network-security-group
     title: Network Security Group
     description: The name of the Network Security Group
 
@@ -367,7 +369,6 @@ variables:
   sic_key:
     type: password
     required: true
-    default: "SICkey"
     title: SIC key
     description: The Secure Internal Communication key creates trusted connections between Check Point components. Trust is required to install policies on gateways and to send logs between gateways and management servers
     minLength: 8
@@ -375,18 +376,18 @@ variables:
  
 
 outputGroups:
-  - title: "Instances info"
+  - title: "CloudGuard Connection"
     outputs:
-      - ${instance_public_ips}
-      - ${instance_private_ips}
-      - ${instance_https_urls}
-      - ${instance_id}
+      - instance_public_ips
+      - instance_private_ips
+      - instance_id
+
 
 outputs:
   instance_https_urls:
     type: link
-    title: Go to Application VM URL
-    visible: false
+    title: Open Gaia Portal
+    visible: true
 
   instance_public_ips:
     type: link
@@ -397,3 +398,13 @@ outputs:
     type: link
     title: Private IP
     visible: true
+
+  initial_instruction:
+    type: string
+    title: Initial Instruction
+    visible: false
+
+  subscription:
+    type: string
+    title: Subscription
+    visible: false
