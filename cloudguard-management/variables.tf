@@ -40,7 +40,7 @@ variable "mp_listing_resource_version" {
 
 variable "vm_display_name" {
   description = "Instance Name"
-  default     = "management"
+  default     = "cloudguard-management"
 }
 
 variable "vm_compute_shape" {
@@ -144,6 +144,26 @@ variable "nsg_display_name" {
 variable "routetable_display_name" {
   description = "Route table Name"
   default     = "route-table"
+}
+
+variable "allow_upload_download" {
+  description = "Automatically download Blade Contracts and other important data. Improve product experience by sending data to Check Point"
+  default     = "true"
+}
+
+variable "shell" {
+  description = "Change the admin shell to enable advanced command line configuration"
+  default     = "/etc/cli.sh"
+}
+
+variable "template_name" {
+  description = "Template name. Should be defined according to deployment type"
+  default = "management"
+}
+
+variable "template_version" {
+  description = "Template version"
+  default = "20200622"
 }
 
 ######################

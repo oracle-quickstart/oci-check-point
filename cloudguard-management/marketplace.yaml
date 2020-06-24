@@ -33,6 +33,8 @@ variableGroups:
       - network_strategy_enum
       - subnet_type_enum
       - nsg_config_enum
+      - template_name
+      - template_version
 
   - title: "Compute Configuration"
     variables:
@@ -57,7 +59,6 @@ variableGroups:
       - subnet_cidr_block      
       - subnet_dns_label
 
-
   - title: "Additional Configuration"
     variables:
       - nsg_whitelist_ip 
@@ -72,13 +73,6 @@ variables:
     description: The Oracle Cloud Identifier (OCID) for your tenancy
     required: true
 
-  compute_compartment_ocid:
-    type: oci:identity:compartment:id
-    required: true
-    title: Compartment
-    description: The compartment in which to create all Compute resources
-    default: compartment_ocid
-
   network_compartment_ocid:
     type: oci:identity:compartment:id
     required: true
@@ -91,6 +85,13 @@ variables:
     title: Region
     description: The region in which to create all resources
     required: true
+
+  compute_compartment_ocid:
+    type: oci:identity:compartment:id
+    required: true
+    title: Compartment
+    description: The compartment in which to create all Compute resources
+    default: compartment_ocid
 
   availability_domain_name:
     type: oci:identity:availabilitydomain:name
@@ -115,7 +116,7 @@ variables:
   vm_display_name:
     type: string
     required: true
-    default: my-instance
+    default: cloudguard-management
     title: Instance Name
     description: The name of the Instance
 
@@ -190,7 +191,7 @@ variables:
         - network_strategy 
         - "Create New VCN and Subnet"
     type: string
-    default: my-vcn
+    default: vcn
     required: true
     title: Virtual Cloud Network (VCN)
     description: The name of the new Virtual Cloud Network (VCN)
@@ -225,7 +226,7 @@ variables:
         - network_strategy 
         - "Create New VCN and Subnet"
     type: string
-    default: my-subnet
+    default: management-subnet
     required: true
     title: Subnet
     description: The name of the new Subnet
@@ -298,6 +299,28 @@ variables:
     default: my-route-table
     title: Route Table
     description: The name of the Route Table
+
+  allow_upload_download:
+    type: enum
+    required: true
+    default: "true"
+    title: Enable Download Info
+    description: Automatically download Blade Contracts and other important data. Improve product experience by sending data to Check Point
+    enum:
+      - "true"
+      - "false"
+
+  shell:
+    type: enum
+    required: true
+    default: "/etc/cli.sh"
+    title: Shell
+    description: Change the admin shell to enable advanced command line configuration
+    enum:
+      - "/etc/cli.sh"
+      - "/bin/bash"
+      - "/bin/csh"
+      - "/bin/tcsh"
 
 
 outputGroups:

@@ -6,4 +6,5 @@ compute_compartment_ocid = "ocid1.compartment.oc1."
 network_compartment_ocid = "ocid1.compartment.oc1."
 region = "us-ashburn-1"
 availability_domain_number = "1"
-ssh_public_key = "ssh-rsa AAA...H
+ssh_public_key = "ssh-rsa AAA...H"
+sic_key="

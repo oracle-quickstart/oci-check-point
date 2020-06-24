@@ -105,7 +105,7 @@ variable "subnet_id" {
 
 variable "subnet_display_name" {
   description = "Subnet Name"
-  default     = "simple-subnet"
+  default     = "frontend-subnet"
 }
 
 variable "subnet_cidr_block" {
@@ -138,7 +138,7 @@ variable "nsg_whitelist_ip" {
 
 variable "nsg_display_name" {
   description = "Network Security Groups - Name"
-  default     = "simple-security-group"
+  default     = "gateway-security-group"
 }
 
 variable "routetable_display_name" {
@@ -157,10 +157,18 @@ variable "shell" {
 }
 
 variable "sic_key" {
-  description = "The Secure Internal Communication key creates trusted connections between Check Point components. Choose a random string consisting of at least 8 alphanumeric characters"
-  default     = "SIC_key"
+  description = "The Secure Internal Communication key creates trusted connections between Check Point components. Choose a random string consisting of at least 12 alphanumeric characters"
 }
 
+variable "template_name" {
+  description = "Template name. Should be defined according to deployment type"
+  default = "single"
+}
+
+variable "template_version" {
+  description = "Template version"
+  default = "20200622"
+}
 
 ######################
 #    Enum Values     #   

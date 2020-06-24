@@ -33,6 +33,8 @@ variableGroups:
       - network_strategy_enum
       - subnet_type_enum
       - nsg_config_enum
+      - template_name
+      - template_version
 
   - title: "Compute Configuration"
     variables:
@@ -121,7 +123,7 @@ variables:
   vm_display_name:
     type: string
     required: true
-    default: ha-instance
+    default: cloudguard-ha
     title: Instance Name
     description: The name of the Instance
 
@@ -370,8 +372,9 @@ variables:
     type: password
     required: true
     title: SIC key
-    description: The Secure Internal Communication key creates trusted connections between Check Point components. Trust is required to install policies on gateways and to send logs between gateways and management servers
-    minLength: 8
+    description: The Secure Internal Communication key creates trusted connections between Check Point components. Trust is required to install policies on gateways and to send logs between gateways and management servers. Only alphanumeric characters are allowed, and the value must be 12-30 characters long
+    minLength: 12
+    maxLength: 30
     pattern: "^[a-zA-Z0-9]*$"
  
 

@@ -19,12 +19,12 @@ resource "oci_core_instance" "simple-vm" {
 
   metadata = {
     ssh_authorized_keys = var.ssh_public_key
-    user_data = base64encode(<<-EOF
-      #!/bin/bash
-      ftw_password=$(curl_cli --silent http://169.254.169.254/opc/v1/instance/id)
-      set user admin password $ftw_password
-      EOF
-    )
+    user_data = base64encode(templatefile("scripts/cloud-init.sh",{
+      allow_upload_download=var.allow_upload_download   
+      template_name = var.template_name
+      template_version = var.template_version
+      shell = var.shell
+    }))
   }
 }
 

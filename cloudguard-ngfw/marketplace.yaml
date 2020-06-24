@@ -33,6 +33,8 @@ variableGroups:
       - network_strategy_enum
       - subnet_type_enum
       - nsg_config_enum
+      - template_name
+      - template_version
 
   - title: "Compute Configuration"
     variables:
@@ -57,7 +59,6 @@ variableGroups:
       - subnet_cidr_block      
       - subnet_dns_label
 
-
   - title: "Additional Configuration"
     variables:
       - nsg_whitelist_ip 
@@ -75,25 +76,17 @@ variables:
     description: The Oracle Cloud Identifier (OCID) for your tenancy
     required: true
 
-  compute_compartment_ocid:
-    type: oci:identity:compartment:id
-    required: true
-    title: Compartment
-    description: The compartment in which to create all Compute resources
-    default: compartment_ocid
-
-  network_compartment_ocid:
-    type: oci:identity:compartment:id
-    required: true
-    title: Compartment
-    description: The compartment in which to create all Network resources
-    default: compartment_ocid
-
   region:
     type: oci:identity:region:name
     title: Region
     description: The region in which to create all resources
     required: true
+
+  compute_compartment_ocid:
+    type: oci:identity:compartment:id
+    required: true
+    title: Compartment
+    description: The compartment in which to create all Compute resources
 
   availability_domain_name:
     type: oci:identity:availabilitydomain:name
@@ -118,7 +111,7 @@ variables:
   vm_display_name:
     type: string
     required: true
-    default: my-instance
+    default: cloudguard-ngfw
     title: Instance Name
     description: The name of the Instance
 
@@ -147,6 +140,12 @@ variables:
     type: string
     required: true
     description: Marketplace Listing package version
+
+  network_compartment_ocid:
+    type: oci:identity:compartment:id
+    required: true
+    title: Compartment
+    description: The compartment in which to create all Network resources
 
   # Network Type Options
   network_strategy:
@@ -291,7 +290,7 @@ variables:
   nsg_display_name:
     type: string
     required: true
-    default: my-network-security-group
+    default: ngfw-network-security-group
     title: Network Security Group
     description: The name of the Network Security Group
 
@@ -327,10 +326,10 @@ variables:
   sic_key:
     type: password
     required: true
-    default: "SICkey"
     title: SIC key
-    description: The Secure Internal Communication key creates trusted connections between Check Point components. Trust is required to install policies on gateways and to send logs between gateways and management servers
-    minLength: 8
+    description: The Secure Internal Communication key creates trusted connections between Check Point components. Trust is required to install policies on gateways and to send logs between gateways and management servers. Only alphanumeric characters are allowed, and the value must be 12-30 characters long
+    minLength: 12
+    maxLength: 30
     pattern: "^[a-zA-Z0-9]*$"
     
 

@@ -23,17 +23,13 @@ resource "oci_core_instance" "ha-vms" {
 
   metadata = {
     ssh_authorized_keys = var.ssh_public_key
-    user_data = base64encode(<<-EOF
-      #!/bin/bash
-      ftw_password=$(curl_cli --silent http://169.254.169.254/opc/v1/instance/id)
-      clish -c 'set user admin shell ${var.shell}' -s
-      clish -c 'set user admin password $ftw_password' -s
-      conf="installSecurityGateway=true&gateway_cluster_member=true&installSecurityManagement=false"
-      conf="$conf&download_info=${var.allow_upload_download}&upload_info=${var.allow_upload_download}"
-      conf="$conf&mgmt_admin_radio=gaia_admin&ftw_sic_key=${var.sic_key}&reboot_if_required=true"
-      /bin/blink_config -s "$conf"
-      EOF
-    )
+    user_data = base64encode(templatefile("scripts/cloud-init.sh",{
+      allow_upload_download=var.allow_upload_download   
+      template_name = var.template_name
+      template_version = var.template_version
+      sic_key = var.sic_key
+      shell = var.shell
+    }))
   }
 }
 

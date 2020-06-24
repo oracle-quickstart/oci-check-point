@@ -175,8 +175,17 @@ variable "shell" {
 }
 
 variable "sic_key" {
-  description = "The Secure Internal Communication key creates trusted connections between Check Point components. Choose a random string consisting of at least 8 alphanumeric characters"
-  default     = "SIC_key"
+  description = "The Secure Internal Communication key creates trusted connections between Check Point components. Choose a random string consisting of at least 12 alphanumeric characters"
+}
+
+variable "template_name" {
+  description = "Template name. Should be defined according to deployment type"
+  default = "ha"
+}
+
+variable "template_version" {
+  description = "Template version"
+  default = "20200622"
 }
 
 ######################
