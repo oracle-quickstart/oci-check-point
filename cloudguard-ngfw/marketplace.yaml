@@ -41,8 +41,10 @@ variableGroups:
       - compute_compartment_ocid
       - vm_display_name
       - vm_compute_shape
+      - vm_flex_shape_ocpus
       - availability_domain_name
       - ssh_public_key
+      - instance_launch_options_network_type
 
   - title: "Network Configuration"
     variables:
@@ -124,6 +126,28 @@ variables:
       compartmentId: compartment_ocid
       imageId: mp_listing_resource_id
       
+  vm_flex_shape_ocpus:
+    visible:
+      eq:
+        - vm_compute_shape
+        - "VM.Standard.E3.Flex"
+    type: integer
+    default: 2
+    title: Flex Shape OCPUs
+    minimum: 1
+    maximum: 64
+    required: false
+
+  instance_launch_options_network_type:
+    type: enum
+    default: "PARAVIRTUALIZED"
+    title: Launch options
+    description: NIC Attachment Type
+    enum:
+      - "PARAVIRTUALIZED"
+      - "VFIO"
+    required: true
+
   mp_listing_id:
     type: string    
     required: true    

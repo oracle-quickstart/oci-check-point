@@ -7,5 +7,7 @@ locals {
   listing_id               = var.mp_listing_id
   listing_resource_id      = var.mp_listing_resource_id
   listing_resource_version = var.mp_listing_resource_version
+
+  is_flex_shape = var.vm_compute_shape == "VM.Standard.E3.Flex" ? [var.vm_flex_shape_ocpus]:[]
 }
 

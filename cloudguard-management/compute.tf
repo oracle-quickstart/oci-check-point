@@ -5,6 +5,13 @@ resource "oci_core_instance" "simple-vm" {
   display_name        = var.vm_display_name
   shape               = var.vm_compute_shape
 
+  dynamic "shape_config" {
+    for_each = local.is_flex_shape
+      content {
+        ocpus = shape_config.value
+      }
+  }
+
   create_vnic_details {
     subnet_id        = local.use_existing_network ? var.subnet_id : oci_core_subnet.public_subnet[0].id
     display_name     = var.vm_display_name
@@ -14,7 +21,11 @@ resource "oci_core_instance" "simple-vm" {
 
   source_details {
     source_type = "image"
-    source_id   = var.mp_listing_resource_id
+    source_id   = local.listing_resource_id
+  }
+
+  launch_options {
+    network_type = var.instance_launch_options_network_type
   }
 
   metadata = {
