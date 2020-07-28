@@ -1,6 +1,6 @@
 # Check Point Security Gateway Cluster - BYOL
 
-This quick start deploys two Check Point R80.30 Security Gateways to be configured as a HA cluster.
+This quick start deploys two Check Point R80.40 Security Gateways to be configured as a HA cluster.
 
 There are two options for deployment:
 - create a new network with a public and private subnet to launch the gateways into
@@ -16,11 +16,8 @@ Each subnet has a virtual secondary private IP created, both of which are assign
 
 If the option for a new network is selected, a public and private subnet are created. A routing table for the private subnet will be created with the backend cluster IP as the default route for all traffic. A routing table for the frontend will have the default route pointed to an internet gateway created.
 
-The First Time Wizard for both instances are handled by a cloud-init script. The following options are set by variables: 
+The First Time Wizard for both instances are handled by a cloud-init script.
 
-- Download info: Choose whether to download important data and Blade Contracts (highly recommended for smooth operation)
-- Upload info: Choose whether to send data to Check Point to improve product experience
-
-The password for the gateway must be set by SSHing to the instance, and password authentication over SSH is disabled by default. The SIC (Secure Internal Communication) key is set to the OCID of the instance on initialization.
+The password for the gateway must be set by SSHing to the instance, and password authentication over SSH is disabled by default
 
 Once the deployment has finished, follow the part 6 of this [guide](https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk142872&partition=General&product=CloudGuard) to finish configuring the cluster with a Check Point security management server.
