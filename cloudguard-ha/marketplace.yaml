@@ -401,14 +401,14 @@ variables:
     maxLength: 30
     pattern: "^[a-zA-Z0-9]*$"
  
-
 outputGroups:
   - title: "CloudGuard Connection"
     outputs:
       - instance_public_ips
       - instance_private_ips
       - instance_id
-
+      - instance_https_urls
+      - cluster_ip 
 
 outputs:
   instance_https_urls:
@@ -418,12 +418,17 @@ outputs:
 
   instance_public_ips:
     type: link
-    title: Public IP
+    title: Public IPs
     visible: true
   
   instance_private_ips:
     type: link
-    title: Private IP
+    title: Private IPs
+    visible: true
+
+  cluster_ip:
+    type: link
+    title: Cluster IP
     visible: true
 
   initial_instruction:

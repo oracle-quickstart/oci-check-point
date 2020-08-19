@@ -89,6 +89,7 @@ variables:
     required: true
     title: Compartment
     description: The compartment in which to create all Compute resources
+    default: compartment_ocid
 
   availability_domain_name:
     type: oci:identity:availabilitydomain:name
@@ -170,6 +171,7 @@ variables:
     required: true
     title: Compartment
     description: The compartment in which to create all Network resources
+    default: compartment_ocid
 
   # Network Type Options
   network_strategy:
