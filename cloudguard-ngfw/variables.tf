@@ -25,12 +25,12 @@ variable "mp_listing_id" {
 }
 
 variable "mp_listing_resource_id" {
-  default     = "ocid1.image.oc1..aaaaaaaabu2a3hhglyti2bc73bdlffqkdj7laj4dbcqfcvansov2ou3g3lwa"
+  default     = "ocid1.image.oc1..aaaaaaaagsapm5pdqheoqp3zwfktwtykvdzwlnx4k42ijc45kat3vg7hsfeq"
   description = "Marketplace Listing Image OCID"
 }
 
 variable "mp_listing_resource_version" {
-  default     = "R80.40_rev1.1"
+  default     = "R81_rev1.0"
   description = "Marketplace Listing Package/Resource Version"
 }
 
@@ -70,7 +70,7 @@ variable "ssh_public_key" {
 
 variable "instance_launch_options_network_type" {
   description = "NIC Attachment Type"
-  default     = "PARAVIRTUALIZED"
+  default     = "VFIO"
 }
 
 ############################
@@ -178,7 +178,7 @@ variable "template_name" {
 
 variable "template_version" {
   description = "Template version"
-  default = "20200724"
+  default = "20200104"
 }
 
 ######################
