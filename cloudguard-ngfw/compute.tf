@@ -39,5 +39,9 @@ resource "oci_core_instance" "simple-vm" {
       shell = var.shell
     }))
   }
+
+  instance_options {
+    are_legacy_imds_endpoints_disabled = "false"
+  }
 }
 

@@ -42,6 +42,10 @@ resource "oci_core_instance" "ha-vms" {
       shell = var.shell
     }))
   }
+
+  instance_options {
+    are_legacy_imds_endpoints_disabled = "false"
+  }
 }
 
 resource "oci_core_vnic_attachment" "private_vnic_attachment" {

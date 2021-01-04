@@ -3,7 +3,7 @@ title: CloudGuard IaaS Next-Gen Firewall with Threat Prevention and SandBlast - 
 # Sub Title shown in Application Information tab.
 description: Advanced Threat Prevention for OCI and Hybrid Cloud Environments with Threat Extraction + Emulation
 schemaVersion: 1.1.0
-version: "20190304"
+version: "20200104"
 
 # URL of Logo Icon used on Application Information tab. Logo must be 130x130 pixels.
 # (Optional)
@@ -35,6 +35,7 @@ variableGroups:
       - nsg_config_enum
       - template_name
       - template_version
+      - instance_launch_options_network_type
 
   - title: "Compute Configuration"
     variables:
@@ -44,7 +45,6 @@ variableGroups:
       - vm_flex_shape_ocpus
       - availability_domain_name
       - ssh_public_key
-      - instance_launch_options_network_type
 
   - title: "Network Configuration"
     variables:
@@ -141,7 +141,7 @@ variables:
 
   instance_launch_options_network_type:
     type: enum
-    default: "PARAVIRTUALIZED"
+    default: "VFIO"
     title: Launch options
     description: NIC Attachment Type
     enum:
