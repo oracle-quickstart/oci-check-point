@@ -2,7 +2,9 @@ resource "oci_core_instance" "ha-vms" {
   depends_on = [oci_core_app_catalog_subscription.mp_image_subscription]
   count      = 2
 
-  availability_domain = (var.availability_domain_name != "" ? var.availability_domain_name : data.oci_identity_availability_domains.ads.availability_domains[count.index].name)
+  availability_domain = ( var.availability_domain_name != "" ? var.availability_domain_name : ( length(data.oci_identity_availability_domains.ads.availability_domains) == 1 ? data.oci_identity_availability_domains.ads.availability_domains[0].name : data.oci_identity_availability_domains.ads.availability_domains[count.index].name))
+
+
   compartment_id      = var.compute_compartment_ocid
   display_name        = "${var.vm_display_name}-${count.index + 1}"
   shape               = var.vm_compute_shape
