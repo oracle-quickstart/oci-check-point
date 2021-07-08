@@ -3,6 +3,10 @@ data "oci_identity_availability_domain" "ad" {
   ad_number      = var.availability_domain_number
 }
 
+data "oci_identity_availability_domains" "ads" {
+  compartment_id = var.tenancy_ocid
+}
+
 data "oci_identity_fault_domains" "fds" {
   availability_domain = "${data.oci_identity_availability_domain.ad.name}"
   compartment_id      = var.compute_compartment_ocid
