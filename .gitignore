@@ -4,7 +4,7 @@
 # .tfstate files
 *.tfstate
 *.tfstate.*
-*.zip*
+#*.zip*
 *.tfvars
 
 # swap files
