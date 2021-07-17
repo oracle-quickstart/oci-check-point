@@ -118,7 +118,7 @@ In this section you will use **Terraform** locally to create this architecture:
 
 ## Check Point Subnets/Interfaces Mapping
 
-Since you are using **CIS landing zone** to create your environment, you will see different subnet name but to clear any confusion you can follow table which reflect subnet names as per VM Series Firewall standards: 
+Since you are using **CIS landing zone** to create your environment, you will see different subnet name but to clear any confusion you can follow table which reflect subnet names as per CloudGuard Firewall standards: 
 
     | Recommended  | Used Name                                |
     |--------------|------------------------------------------|
