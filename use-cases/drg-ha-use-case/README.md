@@ -1,6 +1,8 @@
-# High Availability Active/Passive - Reference Architecture
+# North & South Hub VCNs - Reference Architecture
 
-We are using hub-and-spoke architecture (often called as star topology) to achieve High Availability with Check Point CloudGuard Firewall. This architecture has a central component (the hub) that's connected to multiple networks around it, like a spoke. We are using CloudGuard BOYL Listing from OCI Marketplace.
+We are using hub-and-spoke architecture (often called as star topology) to achieve High Availability and active-active approach with Check Point CloudGuard Firewall. This architecture has a central component (the hub) that's connected to multiple networks around it, like a spoke. We are using CloudGuard BOYL Listing from OCI Marketplace. We are also deploying two seperate Firewall VCNs i.e. North Hub VCN and South Hub VCN.
+
+- Update below link on RA live.
 
 For details of the architecture, see [_Secure Cloud Workloads using Check Point CloudGuard Firewalls_](https://docs.oracle.com/en/solutions/secure-workloads-with-check-point-cloudguard/index.html).
 
@@ -33,7 +35,7 @@ You can deploy this architecture using two approach explained in each section:
 
 In this section you will follow each steps given below to create this architecture:
 
-1. Click [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://console.us-phoenix-1.oraclecloud.com/resourcemanager/stacks/create?region=home&zipUrl=https://github.com/oracle-quickstart/oci-check-point/raw/master/use-cases/ha-lpg-active-passive/resource-manager/check-point-ha.zip)
+1. Click [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://console.us-phoenix-1.oraclecloud.com/resourcemanager/stacks/create?region=home&zipUrl=https://github.com/oracle-quickstart/oci-check-point/raw/master/use-cases/drg-ha-use-case/resource-manager/orm.zip)
 
     > If you aren't already signed in, when prompted, enter the tenancy and user credentials.
 

@@ -1,7 +1,7 @@
 # Title shown in Application Information tab.
-title: Check Point CloudGuard Firewall High Availability Deployment - BYOL
+title: Check Point CloudGuard Firewall North & South Hub VCNs Deployment - BYOL
 # Sub Title shown in Application Information tab.
-description: This Terraform Module deploys Hub and Spoke Architecture with Check Point CloudGuard Firewall in HA (active/passive) mode.
+description: This Terraform Module deploys Hub and Spoke Architecture with Check Point CloudGuard Firewall in North Hub VCN (active-active) and South Hub VCN (active-passive) modes.
 schemaVersion: 1.1.0
 version: "20210210"
 
@@ -55,30 +55,50 @@ variableGroups:
       - nsg_whitelist_ip
       - nsg_display_name
 
-  - title: "Firewall Hub Configuration"
+  - title: "Firewall North Hub VCN Configuration"
     variables:
       - vm_display_name
-      - vcn_id
-      - vcn_display_name
-      - vcn_cidr_block
-      - vcn_dns_label
-      - frontend_subnet_id
-      - frontend_subnet_display_name
-      - frontend_subnet_cidr_block
-      - frontend_subnet_dns_label
-      - backend_subnet_id
-      - backend_subnet_display_name
-      - backend_subnet_cidr_block
-      - backend_subnet_dns_label
+      - north_hub_vcn_id
+      - north_hub_vcn_display_name
+      - north_hub_vcn_cidr_block
+      - north_hub_vcn_dns_label
+      - north_hub_frontend_subnet_id
+      - north_hub_frontend_subnet_display_name
+      - north_hub_frontend_subnet_cidr_block
+      - north_hub_frontend_subnet_dns_label
+      - north_hub_backend_subnet_id
+      - north_hub_backend_subnet_display_name
+      - north_hub_backend_subnet_cidr_block
+      - north_hub_backend_subnet_dns_label
+      - north_hub_nlb_subnet_id
+      - north_hub_nlb_subnet_display_name
+      - north_hub_nlb_subnet_cidr_block
+      - north_hub_nlb_subnet_dns_label
       - use_existing_ip
       - public_routetable_display_name
+      - nlb_routetable_display_name
       - private_routetable_display_name
-      - lpg_routetable_display_name
       - drg_routetable_display_name
       - sgw_routetable_display_name
   
+  - title: "Firewall South Hub VCN Configuration"
+    variables:
+      - south_hub_vcn_id
+      - south_hub_vcn_display_name
+      - south_hub_vcn_cidr_block
+      - south_hub_vcn_dns_label
+      - south_hub_frontend_subnet_id
+      - south_hub_frontend_subnet_display_name
+      - south_hub_frontend_subnet_cidr_block
+      - south_hub_frontend_subnet_dns_label
+      - south_hub_backend_subnet_id
+      - south_hub_backend_subnet_display_name
+      - south_hub_backend_subnet_cidr_block
+      - south_hub_backend_subnet_dns_label
+
   - title: "Web Spoke Configuration"
     variables:
+      - web_vcn_id
       - vm_display_name_web
       - web_vcn_cidr_block
       - web_vcn_dns_label
@@ -96,6 +116,7 @@ variableGroups:
 
   - title: "DB Spoke Configuration"
     variables:
+      - db_vcn_id
       - vm_display_name_db
       - db_vcn_cidr_block
       - db_vcn_dns_label
@@ -318,16 +339,7 @@ variables:
     required: true
     default: "Regional Subnet"
 
-  vcn_display_name:
-    visible: #($network_strategy  == ""Create New VCN and Subnet"")
-      eq:
-        - network_strategy
-        - "Create New VCN and Subnet"
-    type: string
-    default: firewall-vcn
-    required: true
-    title: Firewall Virtual Cloud Network (VCN)
-    description: The name of the new Virtual Cloud Network (VCN)
+
 
   web_vcn_display_name:
     visible: #($network_strategy  == ""Create New VCN and Subnet"")
@@ -351,7 +363,7 @@ variables:
     title: DB Tier Virtual Cloud Network (VCN)
     description: The name of the new Virtual Cloud Network (VCN)
 
-  vcn_id:
+  north_hub_vcn_id:
     visible: #($network_strategy  == "Use Existing VCN and Subnet")
       eq:
         - network_strategy
@@ -360,20 +372,88 @@ variables:
     dependsOn:
       compartmentId: compartment_ocid
     required: true
-    title: Existing Network
-    description: An existing Virtual Cloud Network (VCN) in which to create the compute instances, network resources, and load balancers. If not specified, a new VCN is created.
+    title: Existing Network North Hub VCN ID
+    description: An existing Virtual Cloud Network North Hub (VCN) in which to create the compute instances, network resources, and load balancers. If not specified, a new VCN is created.
 
-  vcn_cidr_block:
+  north_hub_vcn_display_name:
+    visible: #($network_strategy  == ""Create New VCN and Subnet"")
+      eq:
+        - network_strategy
+        - "Create New VCN and Subnet"
+    type: string
+    default: north-hub-vcn
+    required: true
+    title: North Hub VCN to Deploy Active-Active Firewall
+    description: The name of the new north hub Virtual Cloud Network (VCN) to deploy Firewalls
+
+  north_hub_vcn_dns_label:
     visible: #($network_strategy  == ""Create New VCN and Subnet"")
       eq:
         - network_strategy
         - "Create New VCN and Subnet"
     type: string
     required: true
-    default: 10.0.0.0/24
+    default: north
+    title: Firewall North Hub VCN DNS Label
+    description: Firewall North hub VCN DNS Label. Only letters and numbers, starting with a letter. 15 characters max.
+
+  north_hub_vcn_cidr_block:
+    visible: #($network_strategy  == ""Create New VCN and Subnet"")
+      eq:
+        - network_strategy
+        - "Create New VCN and Subnet"
+    type: string
+    required: true
+    default: 10.1.0.0/16
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
-    title: Firewall VCN CIDR BLOCK
-    description: The CIDR of the new Virtual Cloud Network (VCN). If you plan to peer this VCN with another VCN, the VCNs must not have overlapping CIDRs.
+    title: Firewall North Hub VCN CIDR BLOCK
+    description: The CIDR of the new Virtual Cloud Network (VCN) North Hub. If you plan to peer this VCN with another VCN, the VCNs must not have overlapping CIDRs.    
+
+  south_hub_vcn_id:
+    visible: #($network_strategy  == "Use Existing VCN and Subnet")
+      eq:
+        - network_strategy
+        - "Use Existing VCN and Subnet"
+    type: oci:core:vcn:id
+    dependsOn:
+      compartmentId: compartment_ocid
+    required: true
+    title: Existing Network South Hub VCN ID
+    description: An existing Virtual Cloud Network South Hub (VCN) in which to create the compute instances, network resources, and load balancers. If not specified, a new VCN is created.
+
+  south_hub_vcn_display_name:
+    visible: #($network_strategy  == ""Create New VCN and Subnet"")
+      eq:
+        - network_strategy
+        - "Create New VCN and Subnet"
+    type: string
+    default: south-hub-vcn
+    required: true
+    title: South Hub VCN to Deploy Active-Active Firewall
+    description: The name of the new South hub Virtual Cloud Network (VCN) to deploy Firewalls
+
+  south_hub_vcn_dns_label:
+    visible: #($network_strategy  == ""Create New VCN and Subnet"")
+      eq:
+        - network_strategy
+        - "Create New VCN and Subnet"
+    type: string
+    required: true
+    default: south
+    title: Firewall South Hub VCN DNS Label
+    description: Firewall South hub VCN DNS Label. Only letters and numbers, starting with a letter. 15 characters max.
+
+  south_hub_vcn_cidr_block:
+    visible: #($network_strategy  == ""Create New VCN and Subnet"")
+      eq:
+        - network_strategy
+        - "Create New VCN and Subnet"
+    type: string
+    required: true
+    default: 192.168.0.0/16
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+    title: Firewall south Hub VCN CIDR BLOCK
+    description: The CIDR of the new Virtual Cloud Network (VCN) South Hub. If you plan to peer this VCN with another VCN, the VCNs must not have overlapping CIDRs.   
 
   web_vcn_cidr_block:
     visible: #($network_strategy  == ""Create New VCN and Subnet"")
@@ -382,7 +462,7 @@ variables:
         - "Create New VCN and Subnet"
     type: string
     required: true
-    default: 192.168.0.0/24
+    default: 10.0.0.0/24
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
     title: Web VCN CIDR BLOCK
     description: The CIDR of the new Virtual Cloud Network (VCN). If you plan to peer this VCN with another VCN, the VCNs must not have overlapping CIDRs.
@@ -394,12 +474,12 @@ variables:
         - "Create New VCN and Subnet"
     type: string
     required: true
-    default: 192.168.1.0/24
+    default: 10.0.1.0/24
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
     title: DB VCN CIDR BLOCK
     description: The CIDR of the new Virtual Cloud Network (VCN). If you plan to peer this VCN with another VCN, the VCNs must not have overlapping CIDRs.
 
-  frontend_subnet_id:
+  north_hub_frontend_subnet_id:
     visible: #($network_strategy  == "Use Existing VCN and Subnet")
       eq:
         - network_strategy
@@ -410,10 +490,10 @@ variables:
       compartmentId: compartment_ocid
     default: ""
     required: true
-    title: Existing Frontend Subnet
-    description: An existing Frontend subnet to use for compute instances. This subnet must already be present in the chosen VCN.
+    title: Existing Frontend Subnet - North Hub 
+    description: An existing North Hub Frontend subnet to use for compute instances. This subnet must already be present in the chosen VCN.
 
-  frontend_subnet_display_name:
+  north_hub_frontend_subnet_display_name:
     visible: #($network_strategy  == ""Create New VCN and Subnet"")
       eq:
         - network_strategy
@@ -421,22 +501,33 @@ variables:
     type: string
     default: frontend-subnet
     required: true
-    title: Frontend Subnet
-    description: The name of the new Frontend Subnet
+    title: Frontend Subnet - North Hub 
+    description: The name of the new Frontend Subnet in North Hub
 
-  frontend_subnet_cidr_block:
+  north_hub_frontend_subnet_cidr_block:
     visible: #($network_strategy  == ""Create New VCN and Subnet"")
       eq:
         - network_strategy
         - "Create New VCN and Subnet"
     type: string
-    default: 10.0.0.0/25
+    default: 10.1.1.0/24
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
     required: true
-    title: Frontend Subnet CIDR
+    title: Frontend Subnet CIDR - North Hub 
     description: The CIDR of the new Subnet. The new subnet's CIDR should not overlap with any other subnet CIDRs.
 
-  backend_subnet_id:
+  north_hub_frontend_subnet_dns_label:
+    visible: #($network_strategy  == ""Create New VCN and Subnet"")
+      eq:
+        - network_strategy
+        - "Create New VCN and Subnet"
+    type: string
+    required: true
+    default: frontend
+    title: Frontend Subnet DNS Label - North Hub
+    description: Frontend Subnet DNS Label. Only letters and numbers, starting with a letter. 15 characters max.
+
+  north_hub_backend_subnet_id:
     visible: #($network_strategy  == "Use Existing VCN and Subnet")
       eq:
         - network_strategy
@@ -447,10 +538,10 @@ variables:
       compartmentId: compartment_ocid
     default: ""
     required: true
-    title: Existing Backend Subnet
+    title: Existing Backend Subnet - North Hub
     description: An existing backend subnet to use for transit connectivity between hub and spoke. This subnet must already be present in the chosen VCN.
 
-  backend_subnet_display_name:
+  north_hub_backend_subnet_display_name:
     visible: #($network_strategy  == ""Create New VCN and Subnet"")
       eq:
         - network_strategy
@@ -458,20 +549,199 @@ variables:
     type: string
     default: backend-subnet
     required: true
-    title: Backend Subnet
+    title: Backend Subnet - North Hub
     description: The name of the new Backend Subnet
 
-  backend_subnet_cidr_block:
+  north_hub_backend_subnet_cidr_block:
     visible: #($network_strategy  == ""Create New VCN and Subnet"")
       eq:
         - network_strategy
         - "Create New VCN and Subnet"
     type: string
-    default: 10.0.0.128/25
+    default: 10.1.2.0/24
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
     required: true
-    title: Backend Subnet CIDR
+    title: Backend Subnet CIDR - North Hub
     description: The CIDR of the new Subnet. The new subnet's CIDR should not overlap with any other subnet CIDRs.
+
+  north_hub_backend_subnet_dns_label:
+    visible: #($network_strategy  == ""Create New VCN and Subnet"")
+      eq:
+        - network_strategy
+        - "Create New VCN and Subnet"
+    type: string
+    required: true
+    default: backend
+    title: Backend Subnet DNS Label - North Hub
+    description: Backend Subnet DNS Label. Only letters and numbers, starting with a letter. 15 characters max.
+
+  north_hub_nlb_subnet_id:
+    visible: #($network_strategy  == "Use Existing VCN and Subnet")
+      eq:
+        - network_strategy
+        - "Use Existing VCN and Subnet"
+    type: oci:core:subnet:id
+    dependsOn:
+      vcnId: vcn_id
+      compartmentId: compartment_ocid
+    default: ""
+    required: true
+    title: Existing NLB Subnet - North Hub
+    description: An existing nlb subnet to use for transit connectivity between hub and spoke. This subnet must already be present in the chosen VCN.
+
+  north_hub_nlb_subnet_display_name:
+    visible: #($network_strategy  == ""Create New VCN and Subnet"")
+      eq:
+        - network_strategy
+        - "Create New VCN and Subnet"
+    type: string
+    default: nlb-subnet
+    required: true
+    title: NLB Subnet - North Hub
+    description: The name of the new NLB Subnet
+
+  north_hub_nlb_subnet_cidr_block:
+    visible: #($network_strategy  == ""Create New VCN and Subnet"")
+      eq:
+        - network_strategy
+        - "Create New VCN and Subnet"
+    type: string
+    default: 10.1.3.0/24
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+    required: true
+    title: NLB Subnet CIDR - North Hub
+    description: The CIDR of the new Subnet. The new subnet's CIDR should not overlap with any other subnet CIDRs.
+
+  north_hub_nlb_subnet_dns_label:
+    visible: #($network_strategy  == ""Create New VCN and Subnet"")
+      eq:
+        - network_strategy
+        - "Create New VCN and Subnet"
+    type: string
+    required: true
+    default: nlb
+    title: NLB Subnet DNS Label - North Hub
+    description: NLB Subnet DNS Label. Only letters and numbers, starting with a letter. 15 characters max.
+
+  south_hub_frontend_subnet_id:
+    visible: #($network_strategy  == "Use Existing VCN and Subnet")
+      eq:
+        - network_strategy
+        - "Use Existing VCN and Subnet"
+    type: oci:core:subnet:id
+    dependsOn:
+      vcnId: vcn_id
+      compartmentId: compartment_ocid
+    default: ""
+    required: true
+    title: Existing Frontend Subnet - South Hub 
+    description: An existing South Hub Frontend subnet to use for compute instances. This subnet must already be present in the chosen VCN.
+
+  south_hub_frontend_subnet_display_name:
+    visible: #($network_strategy  == ""Create New VCN and Subnet"")
+      eq:
+        - network_strategy
+        - "Create New VCN and Subnet"
+    type: string
+    default: frontend-subnet
+    required: true
+    title: Frontend Subnet - South Hub
+    description: The name of the new Frontend Subnet in North Hub
+
+  south_hub_frontend_subnet_cidr_block:
+    visible: #($network_strategy  == ""Create New VCN and Subnet"")
+      eq:
+        - network_strategy
+        - "Create New VCN and Subnet"
+    type: string
+    default: 192.168.1.0/24
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+    required: true
+    title: Frontend Subnet CIDR - South Hub
+    description: The CIDR of the new Subnet. The new subnet's CIDR should not overlap with any other subnet CIDRs.
+
+  south_hub_frontend_subnet_dns_label:
+    visible: #($network_strategy  == ""Create New VCN and Subnet"")
+      eq:
+        - network_strategy
+        - "Create New VCN and Subnet"
+    type: string
+    required: true
+    default: frontend
+    title: Frontend Subnet DNS Label - South Hub
+    description: Frontend Subnet DNS Label. Only letters and numbers, starting with a letter. 15 characters max.
+
+  south_hub_backend_subnet_id:
+    visible: #($network_strategy  == "Use Existing VCN and Subnet")
+      eq:
+        - network_strategy
+        - "Use Existing VCN and Subnet"
+    type: oci:core:subnet:id
+    dependsOn:
+      vcnId: vcn_id
+      compartmentId: compartment_ocid
+    default: ""
+    required: true
+    title: Existing Backend Subnet - South Hub
+    description: An existing backend subnet to use for transit connectivity between hub and spoke. This subnet must already be present in the chosen VCN.
+
+  south_hub_backend_subnet_display_name:
+    visible: #($network_strategy  == ""Create New VCN and Subnet"")
+      eq:
+        - network_strategy
+        - "Create New VCN and Subnet"
+    type: string
+    default: backend-subnet
+    required: true
+    title: Backend Subnet - South Hub
+    description: The name of the new Backend Subnet
+
+  south_hub_backend_subnet_cidr_block:
+    visible: #($network_strategy  == ""Create New VCN and Subnet"")
+      eq:
+        - network_strategy
+        - "Create New VCN and Subnet"
+    type: string
+    default: 192.168.2.0/24
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+    required: true
+    title: Backend Subnet CIDR - South Hub
+    description: The CIDR of the new Subnet. The new subnet's CIDR should not overlap with any other subnet CIDRs.
+
+  south_hub_backend_subnet_dns_label:
+    visible: #($network_strategy  == ""Create New VCN and Subnet"")
+      eq:
+        - network_strategy
+        - "Create New VCN and Subnet"
+    type: string
+    required: true
+    default: backend
+    title: Backend Subnet DNS Label - South Hub
+    description: Backend Subnet DNS Label. Only letters and numbers, starting with a letter. 15 characters max.
+
+  web_vcn_id:
+    visible: #($network_strategy  == "Use Existing VCN and Subnet")
+      eq:
+        - network_strategy
+        - "Use Existing VCN and Subnet"
+    type: oci:core:vcn:id
+    dependsOn:
+      compartmentId: compartment_ocid
+    required: true
+    title: Existing Network Web Hub VCN ID
+    description: An existing Virtual Cloud Network Web (VCN) in which to create the compute instances, network resources, and load balancers. If not specified, a new VCN is created.
+
+  db_vcn_id:
+    visible: #($network_strategy  == "Use Existing VCN and Subnet")
+      eq:
+        - network_strategy
+        - "Use Existing VCN and Subnet"
+    type: oci:core:vcn:id
+    dependsOn:
+      compartmentId: compartment_ocid
+    required: true
+    title: Existing Network DB Hub VCN ID
+    description: An existing Virtual Cloud Network DB Hub (VCN) in which to create the compute instances, network resources, and load balancers. If not specified, a new VCN is created.
 
   web_transit_subnet_id:
     visible: #($network_strategy  == "Use Existing VCN and Subnet")
@@ -504,7 +774,7 @@ variables:
         - network_strategy
         - "Create New VCN and Subnet"
     type: string
-    default: 192.168.0.0/25
+    default: 10.0.0.0/25
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
     required: true
     title: Web Private Subnet CIDR
@@ -541,7 +811,7 @@ variables:
         - network_strategy
         - "Create New VCN and Subnet"
     type: string
-    default: 192.168.0.128/25
+    default: 10.0.0.128/25
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
     required: true
     title: Web Loadbalancer Public Subnet CIDR
@@ -578,22 +848,11 @@ variables:
         - network_strategy
         - "Create New VCN and Subnet"
     type: string
-    default: 192.168.1.0/24
+    default: 10.0.1.0/24
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
     required: true
     title: db Private Subnet CIDR
     description: The CIDR of the new Subnet. The new subnet's CIDR should not overlap with any other subnet CIDRs.
-
-  vcn_dns_label:
-    visible: #($network_strategy  == ""Create New VCN and Subnet"")
-      eq:
-        - network_strategy
-        - "Create New VCN and Subnet"
-    type: string
-    required: true
-    default: ha
-    title: Firewall VCN DNS Label
-    description: Firewall VCN DNS Label. Only letters and numbers, starting with a letter. 15 characters max.
 
   web_vcn_dns_label:
     visible: #($network_strategy  == ""Create New VCN and Subnet"")
@@ -616,28 +875,6 @@ variables:
     default: db
     title: DB VCN DNS Label
     description: VCN DNS Label. Only letters and numbers, starting with a letter. 15 characters max.
-
-  frontend_subnet_dns_label:
-    visible: #($network_strategy  == ""Create New VCN and Subnet"")
-      eq:
-        - network_strategy
-        - "Create New VCN and Subnet"
-    type: string
-    required: true
-    default: frontend
-    title: Frontend Subnet DNS Label
-    description: Frontend Subnet DNS Label. Only letters and numbers, starting with a letter. 15 characters max.
-
-  backend_subnet_dns_label:
-    visible: #($network_strategy  == ""Create New VCN and Subnet"")
-      eq:
-        - network_strategy
-        - "Create New VCN and Subnet"
-    type: string
-    required: true
-    default: backend
-    title: Backend Subnet DNS Label
-    description: Backend Subnet DNS Label. Only letters and numbers, starting with a letter. 15 characters max.
 
   use_existing_ip:
     type: enum
@@ -679,9 +916,16 @@ variables:
   public_routetable_display_name:
     type: string
     required: true
-    default: FrotendRouteTable
+    default: FrontendRouteTable
     title: Frontend Route Table
     description: The name of the Frontend Route Table
+
+  nlb_routetable_display_name:
+    type: string
+    required: true
+    default: NLBRouteTable
+    title: NLB Route Table
+    description: The name of the NLB Route Table
 
   private_routetable_display_name:
     type: string
@@ -689,13 +933,6 @@ variables:
     default: BackendRouteTable
     title: Backend Route Table
     description: The name of the Backend Route Table
-
-  lpg_routetable_display_name:
-    type: string
-    required: true
-    default: LPGRouteTable
-    title: LPG Route Table
-    description: The name of the LPG Route Table
 
   sgw_routetable_display_name:
     type: string

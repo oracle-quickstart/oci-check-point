@@ -157,7 +157,7 @@ resource "oci_core_subnet" "frontend_subnet" {
   ]
 }
 
-# ------ Create Hub VCN Trust subnet
+# ------ Create Hub VCN Backend subnet
 resource "oci_core_subnet" "backend_subnet" {
   count                      = local.use_existing_network ? 0 : 1
   compartment_id             = var.network_compartment_ocid
@@ -187,13 +187,13 @@ resource "oci_core_route_table_attachment" "update_frontend_route_table" {
 }
 
 
-# ------ Create Cluster Trust Floating IP (Hub VCN)
+# ------ Create Cluster Backend Floating IP (Hub VCN)
 resource "oci_core_private_ip" "cluster_backend_ip" {
   vnic_id      = data.oci_core_vnic_attachments.backend_attachments.vnic_attachments.0.vnic_id
   display_name = "firewall_backend_secondary_private_ip"
 }
 
-# # ------ Create Cluster Untrust Floating IP (Hub VCN)
+# # ------ Create Cluster Frontend Floating IP (Hub VCN)
 resource "oci_core_private_ip" "cluster_frontend_ip" {
   vnic_id = data.oci_core_vnic_attachments.master_attachments.vnic_attachments.0.vnic_id
   display_name = "firewall_frontend_secondary_private_ip"
@@ -247,7 +247,7 @@ resource "oci_core_route_table" "backend_route_table" {
   ]
 }
 
-# ------ Add Trust route table to Trust subnet (Hub VCN)
+# ------ Add Backned route table to Backend subnet (Hub VCN)
 resource "oci_core_route_table_attachment" "backend_route_table_attachment" {
   count          = local.use_existing_network ? 0 : 1
   subnet_id      = local.use_existing_network ? var.backend_subnet_id : oci_core_subnet.backend_subnet[0].id
