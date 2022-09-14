@@ -31,7 +31,7 @@ resource "oci_core_instance" "ha-vms" {
   }
 
   launch_options {
-    network_type = var.instance_launch_options_network_type
+    network_type = length(local.is_flex_shape) > 0 ? var.instance_launch_options_network_type : "PARAVIRTUALIZED"
   }
 
   metadata = {
