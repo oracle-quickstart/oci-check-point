@@ -24,13 +24,14 @@ variable "mp_listing_id" {
   description = "Marketplace Listing OCID"
 }
 
+
 variable "mp_listing_resource_id" {
-  default     = "ocid1.image.oc1..aaaaaaaagsapm5pdqheoqp3zwfktwtykvdzwlnx4k42ijc45kat3vg7hsfeq"
+  default     = "ocid1.image.oc1..aaaaaaaafms4hyju5vjrloutauk4dgnln64xyxz5l33o6spduve2pdefnpdq"
   description = "Marketplace Listing Image OCID"
 }
 
 variable "mp_listing_resource_version" {
-  default     = "R81_rev1.0"
+  default     = "R81.10_with_JHF_45"
   description = "Marketplace Listing Package/Resource Version"
 }
 

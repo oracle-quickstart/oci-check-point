@@ -131,7 +131,7 @@ variables:
 
   vm_compute_shape:
     type: oci:core:instanceshape:name
-    default: VM.Standard2.2
+    default: "VM.Standard.E4.Flex"
     title: Compute Shape
     required: true
     dependsOn:
@@ -142,13 +142,14 @@ variables:
     visible:
       eq:
         - vm_compute_shape
-        - "VM.Standard.E3.Flex"
+        - "VM.Standard.E4.Flex"
     type: integer
     default: 2
     title: Flex Shape OCPUs
     minimum: 1
     maximum: 64
     required: false
+    description: Number of OCPUs of CloudGuard Instance.
 
   instance_launch_options_network_type:
     type: enum
