@@ -23,3 +23,18 @@ First off we'll need to do some pre deploy setup.  That's all detailed [here](ht
 
 You can easily use these templates pointing to the Images published in the Oracle Cloud Infrastructure Marketplace.
 To get it started, navigate to the solution folder and check individual README.md file. 
+
+## Contributing
+
+This project welcomes contributions from the community. Before submitting a pull request, please [review our contribution guide](./CONTRIBUTING.md)
+
+## Security
+
+Please consult the [security guide](./SECURITY.md) for our responsible security vulnerability disclosure process
+
+## License
+
+Copyright (c) 2023 Oracle and/or its affiliates.
+
+Released under the Apache License Version 2.0, January 2004
+<http://www.apache.org/licenses/>.
